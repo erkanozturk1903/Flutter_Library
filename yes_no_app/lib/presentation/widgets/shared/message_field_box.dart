@@ -3,7 +3,12 @@
 import 'package:flutter/material.dart';
 
 class MessageFieldBox extends StatelessWidget {
-  const MessageFieldBox({super.key});
+  final ValueChanged<String> onValue;
+
+  const MessageFieldBox({
+    super.key,
+    required this.onValue,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,15 +20,15 @@ class MessageFieldBox extends StatelessWidget {
         borderRadius: BorderRadius.circular(40));
 
     final inputDecoration = InputDecoration(
-      hintText: 'Mesajınızı Giriniz',
+      hintText: 'Mesajınızı Giriniz"?"',
       enabledBorder: outlineInputBorder,
       focusedBorder: outlineInputBorder,
       filled: true,
       suffixIcon: IconButton(
         onPressed: () {
           final textValue = textController.value.text;
-          print('Metin kutusu değeri? $textValue');
           textController.clear();
+          onValue(textValue);
         },
         icon: const Icon(Icons.send_outlined),
       ),
@@ -37,9 +42,9 @@ class MessageFieldBox extends StatelessWidget {
       controller: textController,
       decoration: inputDecoration,
       onFieldSubmitted: (value) {
-        print('Değer gönderildi $value');
         textController.clear();
         focusNode.requestFocus();
+        onValue(value);
       },
     );
   }
