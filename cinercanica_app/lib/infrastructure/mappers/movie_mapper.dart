@@ -17,14 +17,15 @@ class MovieMapper {
       posterPath: (moviedb.posterPath != '')
           ? 'https://image.tmdb.org/t/p/w500${moviedb.posterPath}'
           : 'https://imgc.allpostersimages.com/img/posters/keep-calm-and-carry-on-motivational-black-art-poster-print_u-L-PXJ5T40.jpg',
-      releaseDate: moviedb.releaseDate,
+      releaseDate:
+          moviedb.releaseDate != null ? moviedb.releaseDate! : DateTime.now(),
       title: moviedb.title,
       video: moviedb.video,
       voteAverage: moviedb.voteAverage,
       voteCount: moviedb.voteCount);
 
   static Movie movieDetailsToEntity(MovieDetails moviedb) => Movie(
-    adult: moviedb.adult,
+      adult: moviedb.adult,
       backdropPath: (moviedb.backdropPath != '')
           ? 'https://image.tmdb.org/t/p/w500${moviedb.backdropPath}'
           : 'https://imgc.allpostersimages.com/img/posters/keep-calm-and-carry-on-motivational-black-art-poster-print_u-L-PXJ5T40.jpg',
@@ -42,5 +43,4 @@ class MovieMapper {
       video: moviedb.video,
       voteAverage: moviedb.voteAverage,
       voteCount: moviedb.voteCount);
-  
 }
