@@ -7,13 +7,22 @@ environment:
   sdk: ^3.5.3
 
 dependencies:
+  dots_indicator: ^3.0.0
   flutter:
     sdk: flutter
+  flutter_riverpod: ^2.6.1
+  flutter_screenutil: ^5.9.3
 
 dev_dependencies:
+  flutter_lints: ^4.0.0
   flutter_test:
     sdk: flutter
-  flutter_lints: ^4.0.0
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/
+    - assets/images/
+    - assets/icons/
+    - assets/voice/
