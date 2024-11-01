@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:mira_academy/common/utils/app_shadow.dart';
+import 'package:mira_academy/common/widgets/app_shadow.dart';
 import 'package:mira_academy/common/widgets/text_widgets.dart';
 
 Widget appOnboardingPage(
-  PageController controller, {
+  PageController controller,
+  BuildContext context, {
   String imagePath = "assets/images/reading.png",
   String title = "",
-  String subTitle = "",
+  String subtitle = "",
   index = 0,
 }) {
   return Column(
@@ -27,15 +28,15 @@ Widget appOnboardingPage(
           right: 30,
         ),
         child: text16Normal(
-          text: subTitle,
+          text: subtitle,
         ),
       ),
-      _nextButton(index, controller)
+      _nextButton(index, controller, context)
     ],
   );
 }
 
-Widget _nextButton(int index, PageController controller) {
+Widget _nextButton(int index, PageController controller, BuildContext context) {
   return GestureDetector(
     onTap: () {
       if (index < 3) {
@@ -44,6 +45,8 @@ Widget _nextButton(int index, PageController controller) {
           duration: const Duration(milliseconds: 300),
           curve: Curves.linear,
         );
+      } else {
+        Navigator.pushNamed(context, "/signIn");
       }
     },
     child: Container(
@@ -53,7 +56,7 @@ Widget _nextButton(int index, PageController controller) {
       decoration: appBoxShadow(),
       child: Center(
         child: text16Normal(
-          text: "next",
+          text: index < 3 ? "Next" : "Get started",
           color: Colors.white,
         ),
       ),

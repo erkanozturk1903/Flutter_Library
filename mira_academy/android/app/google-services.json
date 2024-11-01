@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "267777516080",
+    "project_id": "skoryum-f3683",
+    "storage_bucket": "skoryum-f3683.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:267777516080:android:ccb87c321d10324559c3f5",
+        "android_client_info": {
+          "package_name": "com.example.mira_academy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3gTt81XZoO22CkERECtDcGhsOBKDNEII"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
