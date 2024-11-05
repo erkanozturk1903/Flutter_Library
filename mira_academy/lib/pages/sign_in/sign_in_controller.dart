@@ -1,10 +1,15 @@
+// ignore_for_file: use_build_context_synchronously, avoid_print
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mira_academy/common/entities/user.dart';
 import 'package:mira_academy/common/global_loader/global_loader.dart';
+import 'package:mira_academy/common/utils/constants.dart';
 import 'package:mira_academy/common/widgets/popup_messages.dart';
+import 'package:mira_academy/global.dart';
+import 'package:mira_academy/pages/application/application.dart';
 import 'package:mira_academy/pages/sign_in/notifier/sign_in_notifier.dart';
 
 class SignInController {
@@ -89,8 +94,22 @@ class SignInController {
     //we need to talk to server
 
     // have local storage
-
-    
+    try {
+      var navigator = Navigator.of(ref.context);
+      Global.storageService.setString(
+        AppConstants.STORAGE_USER_PROFILE_KEY,
+        "123",
+      );
+      Global.storageService.setString(
+        AppConstants.STORAGE_USER_TOKEN_KEY,
+        "123456",
+      );
+      navigator.pushNamedAndRemoveUntil("/application", (route) => false);
+    } catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+    }
 
     // redirect to new page
   }

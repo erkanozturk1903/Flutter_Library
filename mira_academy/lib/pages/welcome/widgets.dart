@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mira_academy/common/utils/constants.dart';
 import 'package:mira_academy/common/widgets/app_shadow.dart';
 import 'package:mira_academy/common/widgets/text_widgets.dart';
+import 'package:mira_academy/global.dart';
 
 Widget appOnboardingPage(
   PageController controller,
@@ -46,7 +48,11 @@ Widget _nextButton(int index, PageController controller, BuildContext context) {
           curve: Curves.linear,
         );
       } else {
-        Navigator.pushNamed(context, "/signIn");
+        Global.storageService.setBool(
+          AppConstants.STORAGE_DEVICE_OPEN_FIRST_KEY,
+          true,
+        );
+        Navigator.pushNamed(context, "/sign_in");
       }
     },
     child: Container(
