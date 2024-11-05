@@ -17,6 +17,7 @@ class SignUpController {
   Future<void> handleSignUp() async {
     var state = ref.read(registerNotifierProvider);
     
+    
     // Form validation
     if (!_validateForm(state)) return;
 
