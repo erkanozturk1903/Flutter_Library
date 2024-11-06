@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:mira_academy/common/utils/app_colors.dart';
 import 'package:mira_academy/common/widgets/text_widgets.dart';
+
+import '../utils/app_colors.dart';
+/*
+  preferredSize widget gives you a height or space from the appbar downwords and we can
+  put child in the given space
+
+ */
 
 AppBar buildAppbar({String title=""}) {
   return AppBar(
@@ -12,6 +18,6 @@ AppBar buildAppbar({String title=""}) {
         height: 1,
       ),
     ),
-    title: text16Normal(text: title, color: AppColors.primaryText),
+    title: Text16Normal(text: title, color: AppColors.primaryText),
   );
 }

@@ -1,82 +1,69 @@
-// ignore_for_file: curly_braces_in_flow_control_structures, avoid_print
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:mira_academy/common/routes/app_routes.dart';
-import 'package:mira_academy/global.dart';
-import 'package:mira_academy/pages/application/application.dart';
-import 'package:mira_academy/pages/sign_in/sign_in.dart';
-import 'package:mira_academy/pages/sign_up/sign_up.dart';
-import 'package:mira_academy/pages/welcome/welcome.dart';
+import 'package:mira_academy/common/routes/app_routes_names.dart';
+import 'package:mira_academy/features/application/view/application.dart';
+import 'package:mira_academy/features/sign_in/view/sign_in.dart';
+import 'package:mira_academy/features/sign_up/view/sign_up.dart';
+import 'package:mira_academy/features/welcome/view/welcome.dart';
 
-class AppPage {
+import '../../features/home/view/home.dart';
+import '../../global.dart';
+
+class AppPages {
   static List<RouteEntity> routes() {
     return [
-      RouteEntity(
-        path: AppRoutesNames.WELCOME,
-        page: const Welcome(),
-      ),
-      RouteEntity(
-        path: AppRoutesNames.SIGN_IN,
-        page: const SignIn(),
-      ),
-      RouteEntity(
-        path: AppRoutesNames.REGISTER,
-        page: const SignUp(),
-      ),
-      RouteEntity(
-        path: AppRoutesNames.APPLICATION,
-        page: const Application(),
-      ),
+      RouteEntity(path:AppRoutesNames.WELCOME, page:Welcome()),
+      RouteEntity(path: AppRoutesNames.SIGN_IN, page: const SignIn()),
+      RouteEntity(path: AppRoutesNames.REGISTER, page: const SignUp()),
+      RouteEntity(path: AppRoutesNames.APPLICATION, page: const Application()),
+      RouteEntity(path: AppRoutesNames.HOME, page: const Home()),
     ];
   }
 
   static MaterialPageRoute generateRouteSettings(RouteSettings settings) {
     if (kDebugMode) {
-      print("Clicked route is ${settings.name}");
+      //print("clicked route is ${settings.name}");
     }
-    if (settings.name != null) {
-      var result = routes().where((elements) => elements.path == settings.name);
+    if(settings.name!=null){
 
-      if (result.isNotEmpty) {
-        bool deviceFirstTime = Global.storageService.getDeviceFirstOpen();
-        if (result.first.path == AppRoutesNames.WELCOME && deviceFirstTime) {
+      var result = routes().where((element) => element.path==settings.name);
+
+      if(result.isNotEmpty){
+        //if we used this is first time  or not
+        bool deviceFirstTime= Global.storageService.getDeviceFirstOpen();
+
+        if(result.first.path==AppRoutesNames.WELCOME&&deviceFirstTime){
+
           bool isLoggedIn = Global.storageService.isLoggedIn();
           if(isLoggedIn){
-             return MaterialPageRoute(
-            builder: (_) => const Application(),
-            settings: settings,
-          );
-          }else {
-             return MaterialPageRoute(
-            builder: (_) => const SignIn(),
-            settings: settings,
-          );
+            return MaterialPageRoute(
+                builder: (_) => const Application(),
+                settings: settings);
+          }else{
+            return MaterialPageRoute(
+                builder: (_) => const SignIn(),
+                settings: settings);
           }
-         
-        } else {
+
+        }else{
           if (kDebugMode) {
-            print("App run first time");
+           // print('App ran first time');
           }
           return MaterialPageRoute(
-            builder: (_) => result.first.page,
-            settings: settings,
-          );
+              builder: (_) => result.first.page,
+              settings: settings);
         }
       }
     }
     return MaterialPageRoute(
-      builder: (_) => const Welcome(),
-      settings: settings,
-    );
+        builder: (_) => Welcome(),
+        settings: settings);
   }
 }
 
-class RouteEntity {
+class RouteEntity{
   String path;
   Widget page;
-  RouteEntity({
-    required this.path,
-    required this.page,
-  });
+  RouteEntity({required this.path, required this.page});
 }
