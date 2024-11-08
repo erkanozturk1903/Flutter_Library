@@ -1,10 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mira_store_app/controllers/auth_controller.dart';
 import 'package:mira_store_app/views/screens/auth/login_screen.dart';
 
-class RegisterScreen extends StatelessWidget {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+class RegisterScreen extends StatefulWidget {
   RegisterScreen({super.key});
+
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final AuthController _authController = AuthController();
+  late String email;
+  late String fullName;
+  late String password;
+  bool _isLoading = false;
+
+  register() async {
+    setState(() {
+      _isLoading = true;
+    });
+    await _authController
+        .signUpUsers(
+            context: context,
+            email: email,
+            fullName: fullName,
+            password: password)
+        .whenComplete(() {
+      _formKey.currentState!.reset();
+      setState(() {
+        _isLoading = false;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +81,9 @@ class RegisterScreen extends StatelessWidget {
                     ),
                   ),
                   TextFormField(
+                    onChanged: (value) {
+                      fullName = value;
+                    },
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "Enter your full name";
@@ -85,6 +118,9 @@ class RegisterScreen extends StatelessWidget {
                     height: 20,
                   ),
                   TextFormField(
+                    onChanged: (value) {
+                      email = value;
+                    },
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'enter your email';
@@ -119,6 +155,9 @@ class RegisterScreen extends StatelessWidget {
                     height: 20,
                   ),
                   TextFormField(
+                    onChanged: (value) {
+                      password = value;
+                    },
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "Enter your password";
@@ -148,17 +187,15 @@ class RegisterScreen extends StatelessWidget {
                             height: 20,
                           ),
                         ),
-                        suffixIcon:const  Icon(Icons.visibility)),
+                        suffixIcon: const Icon(Icons.visibility)),
                   ),
                   const SizedBox(
                     height: 20,
                   ),
                   InkWell(
-                    onDoubleTap: () {
+                    onTap: () async {
                       if (_formKey.currentState!.validate()) {
-                        print('Correct');
-                      } else {
-                        print("failed");
+                        register();
                       }
                     },
                     child: Container(
@@ -242,13 +279,17 @@ class RegisterScreen extends StatelessWidget {
                             ),
                           ),
                           Center(
-                            child: Text(
-                              "Sign Up",
-                              style: GoogleFonts.getFont('Lato',
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold),
-                            ),
+                            child: _isLoading
+                                ? const CircularProgressIndicator(
+                                    color: Colors.white,
+                                  )
+                                : Text(
+                                    "Sign Up",
+                                    style: GoogleFonts.getFont('Lato',
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                           )
                         ],
                       ),
@@ -272,7 +313,7 @@ class RegisterScreen extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>  LoginScreen(),
+                              builder: (context) => LoginScreen(),
                             ),
                           );
                         },
