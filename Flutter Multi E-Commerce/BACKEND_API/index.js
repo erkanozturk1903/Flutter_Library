@@ -5,6 +5,8 @@ const authRouter = require('./routes/auth');
 const bannerRouter = require('./routes/banner');
 const categoryRouter = require('./routes/category');
 const subCategoryRouter = require('./routes/sub_category');
+const productRouter = require('./routes/product');
+const productRevieRouter = require('./routes/product_review');
 
 
 //Define the port number the server will listen on
@@ -22,6 +24,8 @@ app.use(authRouter);
 app.use(bannerRouter);
 app.use(categoryRouter);
 app.use(subCategoryRouter);
+app.use(productRouter);
+app.use(productRevieRouter);
 
 // Test endpoint ekleyelim
 app.get('/test', (req, res) => {
