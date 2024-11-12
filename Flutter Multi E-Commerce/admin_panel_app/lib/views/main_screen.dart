@@ -4,6 +4,7 @@ import 'package:admin_panel_app/views/side_bar_screens/buyers_screen.dart';
 import 'package:admin_panel_app/views/side_bar_screens/category_screen.dart';
 import 'package:admin_panel_app/views/side_bar_screens/orders_screen.dart';
 import 'package:admin_panel_app/views/side_bar_screens/products_screen.dart';
+import 'package:admin_panel_app/views/side_bar_screens/sub_category_screen.dart';
 import 'package:admin_panel_app/views/side_bar_screens/upload_banner_screen.dart';
 import 'package:admin_panel_app/views/side_bar_screens/vendors_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,7 +19,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  Widget _selectedScreen = CategoryScreen();
+  Widget _selectedScreen = SubCategoryScreen();
 
   screenSelector(item) {
     switch (item.route) {
@@ -40,6 +41,11 @@ class _MainScreenState extends State<MainScreen> {
       case CategoryScreen.id:
         setState(() {
           _selectedScreen = CategoryScreen();
+        });
+        break;
+      case SubCategoryScreen.id:
+        setState(() {
+          _selectedScreen = SubCategoryScreen();
         });
         break;
       case UploadBannerScreen.id:
@@ -107,6 +113,11 @@ class _MainScreenState extends State<MainScreen> {
             title: 'Categories',
             route: CategoryScreen.id,
             icon: Icons.category,
+          ),
+          AdminMenuItem(
+            title: 'Sub Categories',
+            route: SubCategoryScreen.id,
+            icon: Icons.category_outlined,
           ),
           AdminMenuItem(
             title: 'Upload Banners',

@@ -7,34 +7,40 @@ const authRouter = express.Router();
 
 //signup api endpoint
 authRouter.post('/api/signup', async(req, res) => {
+    console.log('Signup request received:', req.body);
+    
     try {
         const {fullName, email, password} = req.body;
-
-        const existingEmail = await User.findOne({email}); // findOn yerine findOne
-        if(existingEmail) {
-            return res.status(400).json({msg: 'user with same email already exist'});
-        }else {
-            //Generate a salt with a cost factor of 10
-            const salt = await bcrypt.genSalt(10);
-            //hash the password using the generated salt
-            const hashedPassword = await bcrypt.hash(password, salt);
-            let user = new User({
-                fullName,
-                email,
-                password:hashedPassword
-            });
-            
-            user = await user.save();
-            res.json({user});
-        } 
         
-       
-
-    } catch(error) { // e yerine error kullanıyoruz
+        console.log('Checking existing email...');
+        const existingEmail = await User.findOne({email});
+        
+        if(existingEmail) {
+            console.log('Email already exists');
+            return res.status(400).json({msg: 'user with same email already exist'});
+        }
+        
+        console.log('Generating password hash...');
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+        
+        console.log('Creating new user...');
+        let user = new User({
+            fullName,
+            email,
+            password: hashedPassword
+        });
+        
+        console.log('Saving user...');
+        user = await user.save();
+        console.log('User saved successfully');
+        
+        res.json({user});
+    } catch(error) {
+        console.error('Error in signup:', error);
         res.status(500).json({error: error.message});
     }
 });
-
 //signin api endpoint
 
 authRouter.post('/api/signin', async(req, res) => {
