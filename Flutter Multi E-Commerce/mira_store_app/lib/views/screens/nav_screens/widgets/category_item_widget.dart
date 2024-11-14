@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mira_store_app/controllers/category_controller.dart';
 import 'package:mira_store_app/models/category.dart';
+import 'package:mira_store_app/views/screens/detail/screens/inner_category_screen.dart';
 import 'package:mira_store_app/views/screens/nav_screens/widgets/reusable_text_widget.dart';
 
 class CategoryItemWidgets extends StatefulWidget {
@@ -26,7 +27,7 @@ class _CategoryItemWidgetsState extends State<CategoryItemWidgets> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ReusableTextWidget(
+        const ReusableTextWidget(
           title: "Categories",
           subTitle: "View All",
         ),
@@ -58,21 +59,33 @@ class _CategoryItemWidgetsState extends State<CategoryItemWidgets> {
                 ),
                 itemBuilder: (context, index) {
                   final category = categories[index];
-                  return Column(
-                    children: [
-                      Image.network(
-                        category.image,
-                        height: 47,
-                        width: 47,
-                      ),
-                      Text(
-                        category.name,
-                        style: GoogleFonts.quicksand(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                  return InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => InnerCategoryScreen(
+                            category: category,
+                          ),
                         ),
-                      ),
-                    ],
+                      );
+                    },
+                    child: Column(
+                      children: [
+                        Image.network(
+                          category.image,
+                          height: 47,
+                          width: 47,
+                        ),
+                        Text(
+                          category.name,
+                          style: GoogleFonts.quicksand(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
+                    ),
                   );
                 },
               );

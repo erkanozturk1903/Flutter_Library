@@ -1,66 +1,66 @@
 const express = require('express');
-const User = require('../models/user');
+const Vendor = require('../models/vendor');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const vendorRouter = express.Router();
 
-const authRouter = express.Router();
 
-//signup api endpoint
-authRouter.post('/api/signup', async(req, res) => {
+
+
+vendorRouter.post('/api/vendor/signup', async(req, res) => {
     console.log('Signup request received:', req.body);
     
     try {
         const {fullName, email, password} = req.body;
         
         console.log('Checking existing email...');
-        const existingEmail = await User.findOne({email});
+        const existingEmail = await Vendor.findOne({email});
         
         if(existingEmail) {
             console.log('Email already exists');
-            return res.status(400).json({msg: 'user with same email already exist'});
+            return res.status(400).json({msg: 'vendor with same email already exist'});
         }
         
         console.log('Generating password hash...');
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
         
-        console.log('Creating new user...');
-        let user = new User({
+        console.log('Creating new vendor...');
+        let vendor = new Vendor({
             fullName,
             email,
             password: hashedPassword
         });
         
-        console.log('Saving user...');
-        user = await user.save();
-        console.log('User saved successfully');
+        console.log('Saving vendor...');
+        vendor = await vendor.save();
+        console.log('Vendor saved successfully');
         
-        res.json({user});
+        res.json({vendor});
     } catch(error) {
         console.error('Error in signup:', error);
         res.status(500).json({error: error.message});
     }
 });
-//signin api endpoint
 
-authRouter.post('/api/signin', async(req, res) => {
+vendorRouter.post('/api/vendor/signin', async(req, res) => {
     try {
         const {email, password} = req.body;
-     const findUser = await User.findOne({email});
-     if(!findUser){
-        return res.status(400).json({msg: "User not found with this email"});
+     const findVendor = await Vendor.findOne({email});
+     if(!findVendor){
+        return res.status(400).json({msg: "Vendor not found with this email"});
      }
      else {
-       const isMatch = await bcrypt.compare(password, findUser.password);
+       const isMatch = await bcrypt.compare(password, findVendor.password);
        if(!isMatch){
         return res.status(400).json({msg: 'Incorrect Password'});
        }else {
-        const token = jwt.sign({id:findUser._id}, "passwordKey");
+        const token = jwt.sign({id:findVendor._id}, "passwordKey");
 
         //remove sensitive information
-        const {password, ...userWithoutPassword } = findUser._doc;
+        const {password, ...vendorWithoutPassword } = findVendor._doc;
         //sent the response
-        res.json({token,user:userWithoutPassword})
+        res.json({token,vendor:vendorWithoutPassword})
         return 
        }
      }
@@ -69,4 +69,5 @@ authRouter.post('/api/signin', async(req, res) => {
     }
 })
 
-module.exports = authRouter;
+
+module.exports = vendorRouter;

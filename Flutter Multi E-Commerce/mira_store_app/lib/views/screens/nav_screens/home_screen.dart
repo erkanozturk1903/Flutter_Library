@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:mira_store_app/views/screens/nav_screens/widgets/banner_widget.dart';
 import 'package:mira_store_app/views/screens/nav_screens/widgets/category_item_widget.dart';
@@ -11,7 +13,8 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
-          children: [
+         
+          children: const [
             HeaderWidgets(),
             BannerWidget(),
             CategoryItemWidgets(),

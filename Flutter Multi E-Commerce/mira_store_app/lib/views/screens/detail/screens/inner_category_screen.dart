@@ -1,35 +1,44 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: no_leading_underscores_for_local_identifiers
 
 import 'package:flutter/material.dart';
+import 'package:mira_store_app/models/category.dart';
+import 'package:mira_store_app/views/screens/detail/screens/widgets/inner_category_content_widget.dart';
 import 'package:mira_store_app/views/screens/nav_screens/account_screen.dart';
 import 'package:mira_store_app/views/screens/nav_screens/card_screen.dart';
 import 'package:mira_store_app/views/screens/nav_screens/category_screen.dart';
 import 'package:mira_store_app/views/screens/nav_screens/favorite_screen.dart';
-import 'package:mira_store_app/views/screens/nav_screens/home_screen.dart';
 import 'package:mira_store_app/views/screens/nav_screens/store_screen.dart';
 
-class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+class InnerCategoryScreen extends StatefulWidget {
+  final Category category;
+  const InnerCategoryScreen({
+    super.key,
+    required this.category,
+  });
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  State<InnerCategoryScreen> createState() => _InnerCategoryScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
-  int _pageIndex = 0;
-
-  final List<Widget> _pages =  [
-    HomeScreen(),
-    FavoriteScreen(),
-    CategoryScreen(),
-    StoreScreen(),
-    CardScreen(),
-    AccountScreen(),
-  ];
+class _InnerCategoryScreenState extends State<InnerCategoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    int _pageIndex = 0;
+
+    final List<Widget> _pages = [
+      InnerCategoryContentWidget(
+        category: widget.category,
+      ),
+      const FavoriteScreen(),
+      const CategoryScreen(),
+      const StoreScreen(),
+      const CardScreen(),
+       AccountScreen(),
+    ];
+
     return Scaffold(
+     
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _pageIndex,
         selectedItemColor: Colors.purple,
@@ -53,7 +62,7 @@ class _MainScreenState extends State<MainScreen> {
                 width: 25,
               ),
               label: "Favorite"),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
               icon: Icon(Icons.category), label: "Categories"),
           BottomNavigationBarItem(
             icon: Image.asset(

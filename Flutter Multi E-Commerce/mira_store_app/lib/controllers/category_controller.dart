@@ -1,8 +1,6 @@
 // ignore_for_file: avoid_print
 
 import 'dart:convert';
-
-
 import 'package:http/http.dart' as http;
 import 'package:mira_store_app/global_variable.dart';
 import 'package:mira_store_app/models/category.dart';

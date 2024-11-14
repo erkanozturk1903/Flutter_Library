@@ -7,6 +7,7 @@ const categoryRouter = require('./routes/category');
 const subcategoryRouter = require('./routes/sub_category');
 const productRouter = require('./routes/product');
 const productRevieRouter = require('./routes/product_review');
+const vendorRouter = require('./routes/vendor');
 const cors = require('cors');
 
 
@@ -28,6 +29,7 @@ app.use(categoryRouter);
 app.use(subcategoryRouter);
 app.use(productRouter);
 app.use(productRevieRouter);
+app.use(vendorRouter);
 
 
 // Debug için request logger ekleyelim
