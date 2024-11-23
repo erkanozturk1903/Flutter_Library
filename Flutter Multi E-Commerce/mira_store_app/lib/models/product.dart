@@ -39,22 +39,27 @@ class Product {
       'images': images,
     };
   }
-  String toJson() => json.encode(toMap());
 
   factory Product.fromMap(Map<String, dynamic> map) {
-    return Product(
-      id: map['_id'] as String,
-      productName: map['productName'] as String,
-      productPrice: map['productPrice'] as int,
-      quantity: map['quantity'] as int,
-      description: map['description'] as String,
-      category: map['category'] as String,
-      vendorId: map['vendorId'] as String,
-      fullName: map['fullName'] as String,
-      subCategory: map['subCategory'] as String,
-      images: List<String>.from((map['images'] as List<String>)),
-    );
+    try {
+      return Product(
+        id: map['_id']?.toString() ?? '',
+        productName: map['productName']?.toString() ?? '',
+        productPrice: int.tryParse(map['productPrice']?.toString() ?? '0') ?? 0,
+        quantity: int.tryParse(map['quantity']?.toString() ?? '0') ?? 0,
+        description: map['description']?.toString() ?? '',
+        category: map['category']?.toString() ?? '',
+        vendorId: map['vendorId']?.toString() ?? '',
+        fullName: map['fullName']?.toString() ?? '',
+        subCategory: map['subCategory']?.toString() ?? '',
+        images: List<String>.from(map['images'] ?? []),
+      );
+    } catch (e) {
+      print('Error parsing Product from map: $e');
+      print('Problematic map: $map');
+      rethrow;
+    }
   }
 
-
+  String toJson() => json.encode(toMap());
 }

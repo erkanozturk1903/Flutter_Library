@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 class Subcategory {
@@ -7,16 +8,10 @@ class Subcategory {
   final String image;
   final String subCategoryName;
 
-  Subcategory({
-    required this.id,
-    required this.categoryId,
-    required this.categoryName,
-    required this.image,
-    required this.subCategoryName,
-  });
+  Subcategory({required this.id, required this.categoryId, required this.categoryName, required this.image, required this.subCategoryName});
 
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'id': id,
       'categoryId': categoryId,
       'categoryName': categoryName,
@@ -25,7 +20,7 @@ class Subcategory {
     };
   }
 
-  String toJson() => json.encode(toMap());
+   String toJson() => json.encode(toMap());
 
   factory Subcategory.fromJson(Map<String, dynamic> map) {
     return Subcategory(
@@ -37,5 +32,6 @@ class Subcategory {
     );
   }
 
+ 
 
 }

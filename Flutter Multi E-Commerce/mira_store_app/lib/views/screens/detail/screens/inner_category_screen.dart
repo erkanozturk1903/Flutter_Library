@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mira_store_app/models/category.dart';
 import 'package:mira_store_app/views/screens/detail/screens/widgets/inner_category_content_widget.dart';
 import 'package:mira_store_app/views/screens/nav_screens/account_screen.dart';
-import 'package:mira_store_app/views/screens/nav_screens/card_screen.dart';
+import 'package:mira_store_app/views/screens/nav_screens/cart_screen.dart';
 import 'package:mira_store_app/views/screens/nav_screens/category_screen.dart';
 import 'package:mira_store_app/views/screens/nav_screens/favorite_screen.dart';
 import 'package:mira_store_app/views/screens/nav_screens/store_screen.dart';
@@ -33,7 +33,7 @@ class _InnerCategoryScreenState extends State<InnerCategoryScreen> {
       const FavoriteScreen(),
       const CategoryScreen(),
       const StoreScreen(),
-      const CardScreen(),
+      const CartScreen(),
        AccountScreen(),
     ];
 

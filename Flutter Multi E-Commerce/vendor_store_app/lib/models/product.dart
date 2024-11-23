@@ -39,22 +39,23 @@ class Product {
       'images': images,
     };
   }
-  String toJson() => json.encode(toMap());
 
   factory Product.fromMap(Map<String, dynamic> map) {
     return Product(
-      id: map['_id'] as String,
-      productName: map['productName'] as String,
-      productPrice: map['productPrice'] as int,
-      quantity: map['quantity'] as int,
-      description: map['description'] as String,
-      category: map['category'] as String,
-      vendorId: map['vendorId'] as String,
-      fullName: map['fullName'] as String,
-      subCategory: map['subCategory'] as String,
-      images: List<String>.from((map['images'] as List<String>)),
+      id: map['_id'] ?? '',
+      productName: map['productName'] ?? '',
+      productPrice: map['productPrice']?.toInt() ?? 0,
+      quantity: map['quantity']?.toInt() ?? 0,
+      description: map['description'] ?? '',
+      category: map['category'] ?? '',
+      vendorId: map['vendorId'] ?? '',
+      fullName: map['fullName'] ?? '',
+      subCategory: map['subCategory'] ?? '',
+      images: List<String>.from(map['images'] ?? []),
     );
   }
 
+  String toJson() => json.encode(toMap());
 
+  factory Product.fromJson(String source) => Product.fromMap(json.decode(source));
 }

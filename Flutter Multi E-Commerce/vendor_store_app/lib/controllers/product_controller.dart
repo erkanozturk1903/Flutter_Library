@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:convert';
 import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:vendor_store_app/global_variables.dart';
 import 'package:vendor_store_app/models/product.dart';
@@ -18,20 +19,23 @@ class ProductController {
     required List<File>? pickedImages,
     required context,
   }) async {
-    if (pickedImages != null) {
-      final cloudinary = CloudinaryPublic("dmiiiehov", "miraerkan");
-      List<String> images = [];
-      for (var i = 0; i < pickedImages.length; i++) {
-        CloudinaryResponse cloudinaryResponse = await cloudinary.uploadFile(
-          CloudinaryFile.fromFile(
-            pickedImages[i].path,
-            folder: productName,
-          ),
-        );
-        images.add(cloudinaryResponse.secureUrl);
-      }
-      if (category.isNotEmpty && subCategory.isNotEmpty) {
-        final Product product = Product(
+    try {
+      if (pickedImages != null) {
+        final cloudinary = CloudinaryPublic("dmiiiehov", "miraerkan");
+        List<String> images = [];
+        
+        for (var i = 0; i < pickedImages.length; i++) {
+          CloudinaryResponse cloudinaryResponse = await cloudinary.uploadFile(
+            CloudinaryFile.fromFile(
+              pickedImages[i].path,
+              folder: productName,
+            ),
+          );
+          images.add(cloudinaryResponse.secureUrl);
+        }
+
+        if (category.isNotEmpty && subCategory.isNotEmpty) {
+          final Product product = Product(
             id: '',
             productName: productName,
             productPrice: productPrice,
@@ -41,24 +45,42 @@ class ProductController {
             vendorId: vendorId,
             fullName: fullName,
             subCategory: subCategory,
-            images: images);
-        http.Response response = await http.post(
+            images: images,
+          );
+
+          // Ürün verilerini Map olarak al ve JSON'a çevir
+          final Map<String, dynamic> productMap = product.toMap();
+          final String jsonData = json.encode(productMap);
+
+          print('Sending JSON: $jsonData'); // Debug için
+
+          final response = await http.post(
             Uri.parse('$uri/api/add-product'),
-            body: product.toJson(),
-            headers: <String, String>{
-              "Content-Type": "appliccation/json; charset=UTF-8"
-            });
-        manageHttpResponse(
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: jsonData,
+          );
+
+          print('Response Status: ${response.statusCode}');
+          print('Response Body: ${response.body}');
+
+          manageHttpResponse(
             response: response,
             context: context,
             onSuccess: () {
-              showSnackBar(context, 'Product Uploaded');
-            });
+              showSnackBar(context, 'Product Uploaded Successfully');
+            },
+          );
+        } else {
+          showSnackBar(context, 'Please select Category and SubCategory');
+        }
       } else {
-        showSnackBar(context, 'Select Category');
+        showSnackBar(context, 'Please select Images');
       }
-    } else {
-      showSnackBar(context, 'select Images');
+    } catch (e) {
+      print('Error in uploadProduct: $e');
+      showSnackBar(context, 'Error uploading product: ${e.toString()}');
     }
   }
 }
