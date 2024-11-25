@@ -183,12 +183,15 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              SizedBox(
-                                height: 100,
-                                width: 100,
-                                child: Image.network(
-                                  cartItem.image[0],
-                                  fit: BoxFit.cover,
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SizedBox(
+                                  height: 100,
+                                  width: 100,
+                                  child: Image.network(
+                                    cartItem.image[0],
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
                               Column(
