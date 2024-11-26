@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -124,6 +126,54 @@ class AuthController {
       showSnackBar(context, 'signout Successfully');
     } catch (e) {
       print(e);
+    }
+  }
+
+  //update users' state, city and locality
+  Future<void> updateUserLocation({
+    required context,
+    required String id,
+    required String state,
+    required String city,
+    required String locality,
+  }) async {
+    try {
+      //Make an HTTP PUT request to update users's state, city and locality
+      final http.Response response =
+          await http.put(Uri.parse('$uri/api/users/$id'),
+              headers: <String, String>{
+                "Content-Type": "application/json; charset=UTF-8",
+              },
+              //Encode the update data(state, city and locality) as Json object,
+              body: jsonEncode({
+                'state': state,
+                'city': city,
+                'locality': locality,
+              }));
+      manageHttpResponse(
+          response: response,
+          context: context,
+          onSuccess: () async {
+            //Decode the update user data from the response body
+            //this converts the json String response into Dart Map
+            final updateUser = jsonDecode(response.body);
+            //Access Shared preferences for local data storage
+            //shared preferences allow us to store data persisitently on the device
+            SharedPreferences preferences =
+                await SharedPreferences.getInstance();
+            //Encode the update user data as json String
+            //this prepares the data for storage in shared preferences
+            final userJson = jsonEncode(updateUser);
+            //update the application state with the update user data user in Riverpod
+            //this ensures the app reflects the most recent user data
+            providerContainer.read(userProvider.notifier).setUser(userJson);
+
+            //store the update user data in shared prefrence for future user
+            //this allows the app tetrive the user data even after the app restart
+            await preferences.setString('user', userJson);
+          });
+    } catch (e) {
+      showSnackBar(context, 'error updating locaction');
     }
   }
 }

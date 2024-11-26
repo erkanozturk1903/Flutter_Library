@@ -44,5 +44,19 @@ orderRouter.post('/api/orders', async(req, res) => {
         res.status(500).json({error:e.message});
     }
 });
+//GET route for fetching orders by buyer ID
+orderRouter.get('api/orders/:buyerId', async (req, res) => {
+    try {
+        const {buyerId} = req.params;
+        const orders = await Order.find({buyerId});
+        if(orders.length ==0) {
+            return res.status(404).json({msg: "No Orders found for this buyer"});
+        }
+        return res.status(200).json(orders);
+    } catch (error) {
+        res.status(500).json({error: e.message});
+    }
+})
+
 
 module.exports = orderRouter; 
