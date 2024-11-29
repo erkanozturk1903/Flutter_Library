@@ -82,50 +82,49 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _handleSendMessage(String message) async {
-    if (message.trim().isEmpty) return;
+void _handleSendMessage(String message) async {
+  if (message.trim().isEmpty) return;
 
+  setState(() {
+    _messages.add(Message(
+      content: message,
+      isUser: true,
+      timestamp: DateTime.now(),
+    ));
+    _isTyping = true;
+  });
+
+  await _scrollToBottom();
+
+  try {
+    // Tüm konuşma geçmişini gönder
+    final response = await _geminiService.generateResponse(_messages);
+    
     setState(() {
-      // Yeni mesajı listenin sonuna ekliyoruz
       _messages.add(Message(
-        content: message,
-        isUser: true,
+        content: response,
+        isUser: false,
         timestamp: DateTime.now(),
       ));
-      _isTyping = true;
+      _isTyping = false;
     });
 
     await _scrollToBottom();
-
-    try {
-      final response = await _geminiService.generateResponse(message);
-
-      setState(() {
-        // AI yanıtını da listenin sonuna ekliyoruz
-        _messages.add(Message(
-          content: response,
-          isUser: false,
-          timestamp: DateTime.now(),
-        ));
-        _isTyping = false;
-      });
-
-      await _scrollToBottom();
-    } catch (e) {
-      setState(() {
-        _isTyping = false;
-      });
-
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Mesaj gönderilemedi: ${e.toString()}'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
+  } catch (e) {
+    setState(() {
+      _isTyping = false;
+    });
+    
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Yanıt alınamadı. Lütfen tekrar deneyin.'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
+}
 
   // Scroll metodunu da aşağıya kaydıracak şekilde güncelliyoruz
   Future<void> _scrollToBottom() async {
