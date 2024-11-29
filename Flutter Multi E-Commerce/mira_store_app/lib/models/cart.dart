@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class Cart {
   final String productName;
   final int productPrice;
@@ -25,6 +27,37 @@ class Cart {
 
 
 
+  Map<String, dynamic> toMap() {
+    return {
+      'productName': productName,
+      'productPrice': productPrice,
+      'category': category,
+      'image': image,
+      'vendorId': vendorId,
+      'productQuantity': productQuantity,
+      'quantity': quantity,
+      'productId': productId,
+      'description': description,
+      'fullName': fullName,
+    };
+  }
 
+  factory Cart.fromMap(Map<String, dynamic> map) {
+    return Cart(
+      productName: map['productName'] ?? '',
+      productPrice: map['productPrice']?.toInt() ?? 0,
+      category: map['category'] ?? '',
+      image: List<String>.from(map['image']),
+      vendorId: map['vendorId'] ?? '',
+      productQuantity: map['productQuantity']?.toInt() ?? 0,
+      quantity: map['quantity']?.toInt() ?? 0,
+      productId: map['productId'] ?? '',
+      description: map['description'] ?? '',
+      fullName: map['fullName'] ?? '',
+    );
+  }
 
+  String toJson() => json.encode(toMap());
+
+  factory Cart.fromJson(String source) => Cart.fromMap(json.decode(source));
 }

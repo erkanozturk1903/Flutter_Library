@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:mira_store_app/global_variable.dart';
 import 'package:mira_store_app/models/order.dart';
 import 'package:http/http.dart' as http;
@@ -57,6 +59,29 @@ class OrderController {
       );
     } catch (e) {
       showSnackBar(context, e.toString());
+    }
+  }
+
+  //Method to GET Orders by buyer id
+  Future<List<Order>> loadOrders({required String buyerId}) async {
+    try {
+      http.Response response = await http.get(
+        Uri.parse('$uri/api/orders/$buyerId'),
+        headers: <String, String>{
+          "Content-Type": "application/json; charset=UTF-8",
+        },
+      );
+      if (response.statusCode == 200) {
+        List<dynamic> data = jsonDecode(response.body);
+        List<Order> orders =
+            data.map((order) => Order.fromJson(order)).toList();
+        return orders;
+      }
+      {
+        throw Exception('Failed to load Orders');
+      }
+    } catch (e) {
+      throw Exception('error Loading Orders');
     }
   }
 }

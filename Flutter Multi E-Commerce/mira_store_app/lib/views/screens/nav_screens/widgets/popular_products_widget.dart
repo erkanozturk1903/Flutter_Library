@@ -1,71 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mira_store_app/controllers/product_controller.dart';
-import 'package:mira_store_app/models/product.dart';
+import 'package:mira_store_app/provider/product_provider.dart';
 import 'package:mira_store_app/views/screens/nav_screens/widgets/product_item_widget.dart';
 
-class PopularProductsWidget extends StatefulWidget {
+class PopularProductsWidget extends ConsumerStatefulWidget {
   const PopularProductsWidget({super.key});
 
   @override
-  State<PopularProductsWidget> createState() => _PopularProductsWidgetState();
+  ConsumerState<PopularProductsWidget> createState() =>
+      _PopularProductsWidgetState();
 }
 
-class _PopularProductsWidgetState extends State<PopularProductsWidget> {
-  late Future<List<Product>> futurePopularProducts;
-  final ProductController _productController = ProductController();
-
+class _PopularProductsWidgetState extends ConsumerState<PopularProductsWidget> {
   @override
   void initState() {
     super.initState();
-    futurePopularProducts = _productController.loadPopularProduct();
+    _fetchProduct();
   }
 
-  Future<void> _refreshProducts() async {
-    setState(() {
-      futurePopularProducts = _productController.loadPopularProduct();
-    });
+  Future<void> _fetchProduct() async {
+    final ProductController productController = ProductController();
+    try {
+      final products = await productController.loadPopularProduct();
+      ref.read(productProvider.notifier).setProduct(products);
+    } catch (e) {
+      print("$e");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Product>>(
-      future: futurePopularProducts,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        } else if (snapshot.hasError) {
-          return Center(
-            child: Text(
-              'Error: ${snapshot.error}',
-              textAlign: TextAlign.center,
-            ),
-          );
-        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Center(
-            child: Text('No Popular Products Available'),
-          );
-        }
-
-        final products = snapshot.data!;
-        return SizedBox(
-          height: 250,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: products.length,
-            itemBuilder: (context, index) {
-              try {
-                final product = products[index];
-                return ProductItemWidget(product: product);
-              } catch (e) {
-                print('Error building product at index $index: $e');
-                return const SizedBox.shrink(); // Hatalı ürünü gösterme
-              }
-            },
-          ),
-        );
-      },
+    final products = ref.watch(productProvider);
+    return SizedBox(
+      height: 250,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: products.length,
+        itemBuilder: (context, index) {
+          try {
+            final product = products[index];
+            return ProductItemWidget(product: product);
+          } catch (e) {
+            print('Error building product at index $index: $e');
+            return const SizedBox.shrink(); // Hatalı ürünü gösterme
+          }
+        },
+      ),
     );
   }
 }

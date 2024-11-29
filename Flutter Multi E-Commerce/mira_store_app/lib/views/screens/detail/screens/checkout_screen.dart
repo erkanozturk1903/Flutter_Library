@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mira_store_app/controllers/order_controller.dart';
 import 'package:mira_store_app/provider/cart_provider.dart';
 import 'package:mira_store_app/provider/user_provider.dart';
-import 'package:mira_store_app/views/screens/detail/screens/widgets/shipping_address_screen.dart';
+import 'package:mira_store_app/views/screens/detail/screens/shipping_address_screen.dart';
 
 class CheckoutScreen extends ConsumerStatefulWidget {
   const CheckoutScreen({super.key});
